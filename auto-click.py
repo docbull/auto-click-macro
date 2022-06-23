@@ -1,34 +1,72 @@
 from tkinter import *
+import tkinter.font as font
 import pyautogui
+import time
 # time.sleep(1800)
 
 root = Tk()
 root.title("⚙️ Auto Clicker")
-root.geometry("540x380")
+root.geometry("450x220")
 root.resizable(False, False)
 
-xLabel = Label(root, text = "X Axis")
-yLabel = Label(root, text = "Y Axis")
-xLabel.grid(row=0, column=0)
-yLabel.grid(row=0, column=1)
-# xLabel.pack()
-# yLabel.pack()
-xAxis = Text(root, width=10, height=1)
-# xAxis.insert(END, "X axis")
-yAxis = Text(root, width=10, height=1)
-# yAxis.insert(END, "Y axis")
-xAxis.grid(row=1, column=0)
-yAxis.grid(row=1, column=1)
-# xAxis.pack()
-# yAxis.pack()
-
 def runMacro():
-    x = int(xAxis.get("1.0", END))
-    y = int(yAxis.get("1.0", END))
-    pyautogui.click(600, 185)
+    lists = listbox.get(0, END)
+    for i in range(len(lists)):
+        print(lists[i])
+    # pyautogui.click(600, 185)
 
-button1 = Button(root, text="Run", command=runMacro)
-button1.grid(row=15, column=15)
-# button1.pack()
+def clicker(x, y):
+    pyautogui.click(x, y)
+
+def moveCursor(x, y):
+    pyautogui.moveTo(x, y)
+
+def pause():
+    time.sleep(1)
+
+def add(entry):
+    global items
+    items.append(entry.get())
+    listbox.insert(END, entry.get())
+    entry.delete(0, 'end')
+
+def delete():
+    global items
+    selection = listbox.curselection()
+    if(len(selection) == 0):
+        return
+    value = listbox.get(selection[0])
+    ind = items.index(value)
+    del items[ind]
+    listbox.delete(selection[0])
+
+def reset():
+    listbox.delete(0, END)
+
+items = ['Test #1', 'Test #2', 'Test #3']
+buttonFont = font.Font(size=50)
+
+clickButton = Button(root, text="👆", command=clicker)
+clickButton['font'] = buttonFont
+moveButton = Button(root, text="👣", command=moveCursor)
+moveButton['font'] = buttonFont
+pauseButton = Button(root, text="⏳", command=pause)
+pauseButton['font'] = buttonFont
+
+listbox = Listbox(root, height=0, selectmode="extended")
+for i in range(len(items)):
+    listbox.insert(END, items[i])
+
+deleteButton = Button(root, width=9, text="delete", overrelief="solid", command=delete)
+resetButton = Button(root, width=9, text="reset", command=reset)
+runButton = Button(root, width=9, text="RUN", command=runMacro)
+
+clickButton.grid(row=0, column=0, sticky=N+E+W+S)
+moveButton.grid(row=1, column=0, sticky=N+E+W+S)
+pauseButton.grid(row=2, column=0, sticky=N+E+W+S)
+listbox.grid(row=0, column=1, rowspan=2, columnspan=3, sticky=N+E+W+S)
+deleteButton.grid(row=2, column=1)
+resetButton.grid(row=2, column=2)
+runButton.grid(row=2, column=3)
 
 root.mainloop()
