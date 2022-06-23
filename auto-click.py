@@ -13,7 +13,11 @@ root.resizable(False, False)
 def runMacro():
     lists = listbox.get(0, END)
     for i in range(len(lists)):
-        print(lists[i])
+        if '👆' in lists[i]:
+            pos = lists[i].split()
+            pyautogui.click(int(pos[1]), int(pos[2]))
+            # pyautogui.click()
+        # print(lists[i])
     # pyautogui.click(600, 185)
 
 def add(entry):
@@ -23,23 +27,12 @@ def add(entry):
     entry.delete(0, 'end')
 
 def delete():
-    global items
-    selection = listbox.curselection()
-    if(len(selection) == 0):
-        return
-    value = listbox.get(selection[0])
-    ind = items.index(value)
-    del items[ind]
-    listbox.delete(selection[0])
+    listbox.delete(ANCHOR)
 
 def reset():
     listbox.delete(0, END)
 
-items = ['Test #1', 'Test #2', 'Test #3']
 listbox = Listbox(root, height=0, selectmode="extended")
-for i in range(len(items)):
-    listbox.insert(END, items[i])
-
 buttonFont = font.Font(size=50)
 
 # set up buttons
