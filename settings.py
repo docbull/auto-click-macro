@@ -6,11 +6,18 @@ import time
 
 fontSetup = ('Arial', 15)
 
-def insertCommand(listbox, type, cmd):
+def insertCommand(window, listbox, type, cmd):
+    cmd = cmd[0:len(cmd)-1]
+    # pos = cmd.split()
     listbox.insert(END, type + ' ' + cmd)
+    close(window)
 
 def close(window):
     window.destroy()
+
+def getCursorPosition(event, positionXY):
+    positionXY.delete(1.0, END)
+    positionXY.insert(1.0, pyautogui.position())
 
 def clicker(root, listbox):
     clickerWindow = Toplevel(root)
@@ -22,21 +29,19 @@ def clicker(root, listbox):
     buttonType.set("Left")
     positionLabel = Label(clickerWindow, text="Position: ", font=fontSetup)
     positionXY = Text(clickerWindow, width=10, height=1.5)
+    positionButton = Button(clickerWindow, text="+", font=fontSetup)
+    positionButton.bind('<ButtonRelease-1>', lambda event:getCursorPosition(event, positionXY))
     amountLabel = Label(clickerWindow, text="Amount: ", font=fontSetup)
-
-    cmd = "click"
-
     cancelButton = Button(clickerWindow, text="Cancel", command=lambda:close(clickerWindow))
-    okButton = Button(clickerWindow, text="OK", command=lambda:insertCommand(listbox, "👆", cmd))
-
+    okButton = Button(clickerWindow, text="OK", command=lambda:insertCommand(clickerWindow, listbox, "👆", positionXY.get(1.0, END)))
     buttonLabel.grid(row=1, column=0, sticky=W)
     buttonType.grid(row=1, column=1, columnspan=2, sticky=E)
     positionLabel.grid(row=2, column=0, sticky=W)
     positionXY.grid(row=2, column=1, sticky=E)
+    positionButton.grid(row=2, column=2, sticky=E)
     amountLabel.grid(row=3, column=0, sticky=W)
     cancelButton.grid(row=4, column=0, sticky=E)
     okButton.grid(row=4, column=1, sticky=E)
-    # pyautogui.click(x, y)
 
 def moveCursor(root, listbox):
     cursorWindow = Toplevel(root)
