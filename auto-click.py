@@ -2,6 +2,7 @@ from tkinter import *
 import tkinter.font as font
 import pyautogui
 import time
+from settings import *
 # time.sleep(1800)
 
 root = Tk()
@@ -14,15 +15,6 @@ def runMacro():
     for i in range(len(lists)):
         print(lists[i])
     # pyautogui.click(600, 185)
-
-def clicker(x, y):
-    pyautogui.click(x, y)
-
-def moveCursor(x, y):
-    pyautogui.moveTo(x, y)
-
-def pause():
-    time.sleep(1)
 
 def add(entry):
     global items
@@ -44,23 +36,26 @@ def reset():
     listbox.delete(0, END)
 
 items = ['Test #1', 'Test #2', 'Test #3']
-buttonFont = font.Font(size=50)
-
-clickButton = Button(root, text="👆", command=clicker)
-clickButton['font'] = buttonFont
-moveButton = Button(root, text="👣", command=moveCursor)
-moveButton['font'] = buttonFont
-pauseButton = Button(root, text="⏳", command=pause)
-pauseButton['font'] = buttonFont
-
 listbox = Listbox(root, height=0, selectmode="extended")
 for i in range(len(items)):
     listbox.insert(END, items[i])
 
+buttonFont = font.Font(size=50)
+
+# set up buttons
+clickButton = Button(root, text="👆", command=lambda:clicker(root, listbox))
+clickButton['font'] = buttonFont
+moveButton = Button(root, text="👣", command=lambda:moveCursor(root, listbox))
+moveButton['font'] = buttonFont
+pauseButton = Button(root, text="⏳", command=lambda:pause(root, listbox))
+pauseButton['font'] = buttonFont
+
+# execution buttons
 deleteButton = Button(root, width=9, text="delete", overrelief="solid", command=delete)
 resetButton = Button(root, width=9, text="reset", command=reset)
 runButton = Button(root, width=9, text="RUN", command=runMacro)
 
+# components arrangement
 clickButton.grid(row=0, column=0, sticky=N+E+W+S)
 moveButton.grid(row=1, column=0, sticky=N+E+W+S)
 pauseButton.grid(row=2, column=0, sticky=N+E+W+S)
