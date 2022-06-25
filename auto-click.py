@@ -10,21 +10,17 @@ root.title("⚙️ Auto Clicker")
 root.geometry("450x220")
 root.resizable(False, False)
 
-def runMacro():
+def run():
     lists = listbox.get(0, END)
     for i in range(len(lists)):
         if '👆' in lists[i]:
             pos = lists[i].split()
-            pyautogui.click(int(pos[1]), int(pos[2]))
-            # pyautogui.click()
-        # print(lists[i])
-    # pyautogui.click(600, 185)
-
-def add(entry):
-    global items
-    items.append(entry.get())
-    listbox.insert(END, entry.get())
-    entry.delete(0, 'end')
+            pyautogui.click(int(pos[1]), int(pos[2]), clicks=int(pos[3]), interval=0.05)
+        elif '👣' in lists[i]:
+            pos = lists[i].split()
+            pyautogui.moveTo()
+        elif '⏳' in lists[i]:
+            print()
 
 def delete():
     listbox.delete(ANCHOR)
@@ -46,7 +42,7 @@ pauseButton['font'] = buttonFont
 # execution buttons
 deleteButton = Button(root, width=9, text="delete", overrelief="solid", command=delete)
 resetButton = Button(root, width=9, text="reset", command=reset)
-runButton = Button(root, width=9, text="RUN", command=runMacro)
+runButton = Button(root, width=9, text="RUN", command=run)
 
 # components arrangement
 clickButton.grid(row=0, column=0, sticky=N+E+W+S)
